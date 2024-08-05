@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivvvia/models/question.dart';
 import 'package:trivvvia/provider/provider.dart';
+import 'package:trivvvia/widgets/question_card.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -13,14 +14,24 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trivvvia'),
+        centerTitle: true,
+        title: Text(
+          'Trivvvia',
+          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
+      backgroundColor: Theme.of(context).colorScheme.primary,
       body: switch (allQuestions) {
-        AsyncData(:final value) => ListView.builder(
-            itemCount: value.length,
-            itemBuilder: (context, index) {
-              return Text(value[index].question);
-            },
+        AsyncData(:final value) => SafeArea(
+            child: ListView.builder(
+              itemCount: value.length,
+              itemBuilder: (context, index) {
+                return QuestionCard(value[index]);
+              },
+            ),
           ),
         AsyncError(:final error) =>
           Text('Error getting trivia! ${error.toString()}'),
