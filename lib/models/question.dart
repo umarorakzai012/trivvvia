@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:html_unescape/html_unescape_small.dart';
+
 class QuestionModel {
   final String type;
   final String question;
@@ -12,11 +16,16 @@ class QuestionModel {
   });
 
   factory QuestionModel.fromMap(Map<String, dynamic> map) {
+    var unescape = HtmlUnescape();
+    List<String> ica = [
+      for (var incorrectAnswer in map['incorrect_answers'])
+        unescape.convert(incorrectAnswer)
+    ];
     return QuestionModel(
-      type: map['type'],
-      question: map['question'],
-      correctAnswer: map['correct_answer'],
-      incorrectAnswers: map['incorrect_answers'],
+      type: unescape.convert(map['type']),
+      question: unescape.convert(map['question']),
+      correctAnswer: unescape.convert(map['correct_answer']),
+      incorrectAnswers: ica,
     );
   }
 }
