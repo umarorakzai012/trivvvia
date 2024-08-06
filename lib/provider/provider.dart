@@ -9,6 +9,7 @@ part 'provider.g.dart';
 
 @riverpod
 Future<List<QuestionModel>> questions(QuestionsRef ref) async {
+  await Future.delayed(Duration(seconds: 2));
   var uri = Uri.parse('https://opentdb.com/api.php?amount=10');
   final response = await http.get(uri);
 

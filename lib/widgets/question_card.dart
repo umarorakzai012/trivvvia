@@ -15,9 +15,13 @@ class _QuestionCardState extends State<QuestionCard> {
   @override
   Widget build(BuildContext context) {
     List<String> choices = [
+      widget.question.correctAnswer,
       ...widget.question.incorrectAnswers,
-      widget.question.correctAnswer
     ];
+
+    if (widget.question.type == 'multiple') {
+      choices.shuffle();
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -40,17 +44,19 @@ class _QuestionCardState extends State<QuestionCard> {
                 title: Text(choice),
                 value: choice,
                 groupValue: userAnswer,
-                onChanged: (String? value) {
-                  if (value == null) return;
-                  setState(() {
-                    userAnswer = value;
-                  });
-                },
+                onChanged: radioButtonOnChange,
               ),
             const SizedBox(height: 5)
           ],
         ),
       ),
     );
+  }
+
+  void radioButtonOnChange(String? value) {
+    if (value == null) return;
+    setState(() {
+      userAnswer = value;
+    });
   }
 }
